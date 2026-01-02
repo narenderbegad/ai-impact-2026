@@ -3,557 +3,549 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI for Impact 2026 | Interactive Report</title>
+    <title>AI Impact 2026 | Aishnar Intelligence Briefing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #faf9f6; /* Off-white/Stone background */
-            color: #1f2937;
+        :root {
+            --bg-stone: #fcfaf8;
+            --aishnar-blue: #0ea5e9;
+            --aishnar-dark: #0f172a;
+            --accent-teal: #14b8a6;
         }
-        
-        /* Smooth scrolling for navigation */
-        html {
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-stone);
+            color: var(--aishnar-dark);
             scroll-behavior: smooth;
         }
-
-        /* Chart Container Styling - MANDATORY for responsiveness */
+        /* Mandatory Chart Container Constraints */
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
+            max-width: 700px;
+            margin: 0 auto;
+            height: 350px;
             max-height: 400px;
         }
-
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* Custom Scrollbar for article lists */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .aishnar-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--aishnar-blue);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--aishnar-blue); }
+        
+        /* Custom UI Elements */
+        .reality-bar {
+            height: 6px;
+            background: #e2e8f0;
             border-radius: 3px;
+            overflow: hidden;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        .reality-fill {
+            height: 100%;
+            background: var(--aishnar-blue);
+            transition: width 1s ease-in-out;
         }
-
-        /* Card hover effects */
-        .article-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Interactive Element Highlights */
-        .interactive-highlight {
-            border-bottom: 2px solid #10b981; /* Emerald green underline */
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .interactive-highlight:hover {
-            background-color: #d1fae5;
-        }
+        .live-indicator { animation: subtle-pulse 2s infinite; }
     </style>
-    <!-- Chosen Palette: Warm Neutrals & Nature Tones (Stone #faf9f6, Slate #1f2937, Sage/Emerald #10b981 for actions, Soft Blue #3b82f6 for data) -->
+    <!-- Chosen Palette: Sovereign Minimalist (Stone #fcfaf8, Aishnar Blue #0ea5e9, Deep Slate #0f172a) -->
     <!-- Application Structure Plan: 
-         1. Hero Section: Sets the context of 2026.
-         2. Daily Life (User-Centric): Focuses on "What's in it for me?" with a doughnut chart on personal task delegation.
-         3. Global Impact (Data-Centric): Bar/Line charts showing macro changes (Education, Climate) with filtering.
-         4. Trending Articles (Discovery): A filterable feed of "future" news articles relevant to daily life.
-         5. The Ethical Balance: A simple toggle interaction to explore pros/cons.
-         Rationale: Starts personal -> moves global -> provides reading material -> ends with critical thinking.
+         1. Master Briefing Intro: Direct, mentor-style framing of 2026.
+         2. Aishnar Core Intelligence: Highlighting intelligence.aishnar.com as the portal for sovereignty.
+         3. The Daily Utility Hub: Interactive Search addressing common 2026 friction points.
+         4. Global Impact Metrics: Radar and Bar charts showing real-world shifts in energy and labor.
+         5. Trending Article Feed: "Future-Live" articles recently updated to reflect Jan 2026 reality.
     -->
     <!-- Visualization & Content Choices:
-         - Doughnut Chart: "My Day in 2026" - Shows time saved/task allocation. Goal: Personal relevance.
-         - Bar Chart: "Sector Efficiency" - Compares 2023 vs 2026. Goal: Show progress.
-         - Cards: Trending Articles. Goal: Easy consumption of text heavy content.
-         - NO SVG/Mermaid used. All visuals via Chart.js or Tailwind HTML.
+         - Radar Chart: Comparison of Legacy Skills vs Aishnar-Era Competencies.
+         - Stacked Bar: AI Value Output vs Energy Consumption.
+         - Interactive Query Hub: Addressing User Daily Needs (Health, Taxes, Work).
+         - CONFIRMATION: NO SVG used. NO Mermaid JS used. 
     -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-sky-100">
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-stone-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
-                    <div class="w-8 h-8 bg-emerald-600 rounded-lg mr-2 flex items-center justify-center text-white font-bold">AI</div>
-                    <span class="font-bold text-xl tracking-tight text-slate-800">Impact<span class="text-emerald-600">2026</span></span>
+    <!-- Global Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-card border-b border-slate-200 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-10 h-10 aishnar-gradient rounded-xl flex items-center justify-center text-white font-black text-xl">A</div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold text-lg tracking-tighter leading-none">AISHNAR</span>
+                    <span class="text-[10px] font-bold text-sky-600 tracking-widest uppercase">Intelligence 2026</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#daily-life" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Daily Life</a>
-                    <a href="#global-impact" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Global Shifts</a>
-                    <a href="#trending" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Trending Now</a>
+            </div>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <a href="#sovereignty" class="nav-link">Sovereignty</a>
+                <a href="#utility" class="nav-link">Daily Utility</a>
+                <a href="#metrics" class="nav-link">Metrics</a>
+                <a href="#trending" class="nav-link">Trending</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex flex-col items-end">
+                    <span class="text-[10px] font-bold text-emerald-500 flex items-center live-indicator">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span> NODE: ACTIVE
+                    </span>
+                    <span class="text-[9px] text-slate-400">SYNC: 0.04ms</span>
                 </div>
-                <button onclick="document.getElementById('trending').scrollIntoView()" class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-700 transition-colors">
-                    Read Updates
+                <button onclick="window.open('https://intelligence.aishnar.com', '_blank')" class="bg-slate-900 text-white px-6 py-2.5 rounded-full text-xs font-black hover:bg-sky-600 transition shadow-lg shadow-sky-100">
+                    ENTER PORTAL
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="bg-[#faf9f6] pt-16 pb-12 sm:pt-24 sm:pb-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">State of AI Report 2026</div>
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-                Humanizing the Machine: <br/> <span class="text-emerald-600">AI for Daily Life & Global Good</span>
+    <!-- Hero / The Mentor's Reality -->
+    <header class="pt-40 pb-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-6xl md:text-8xl font-black text-slate-900 leading-[0.9] mb-10 tracking-tighter">
+                Impact <span class="text-sky-500">2026.</span><br/>Reality over Myth.
             </h1>
-            <p class="text-lg sm:text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Welcome to 2026. AI is no longer just a buzzword—it's your personalized health coach, your creative partner, and the backbone of global sustainability. Explore how the landscape has shifted from <em>hype</em> to <em>human impact</em>.
-            </p>
-            <div class="flex justify-center space-x-4">
-                <a href="#daily-life" class="bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">Explore My Impact</a>
-                <a href="#trending" class="bg-white text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition">Latest Articles</a>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="md:col-span-2">
+                    <p class="text-xl text-slate-600 leading-relaxed mb-8">
+                        The "AI Revolution" is over. We have entered the **Execution Era**. In 2026, general-purpose chatbots are for consumers; **Sovereign Intelligence Systems** like Aishnar are for architects of the future. 
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-sky-600">84%</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase leading-none">Task<br/>Automation</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-indigo-600">12x</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase leading-none">Output<br/>Density</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-sky-500/40 transition"></div>
+                    <p class="text-[10px] font-black tracking-widest text-sky-400 mb-4 uppercase">Direct Briefing</p>
+                    <p class="text-sm font-medium italic leading-relaxed opacity-90">
+                        "If your AI isn't sovereign, you're just paying a subscription to give away your competitive edge. Aishnar changes that."
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-white/10 flex justify-between items-center">
+                        <span class="text-[10px] font-bold">JAN 02, 2026</span>
+                        <span class="text-sky-400 text-xs font-bold">VERIFIED</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+    <!-- Section 1: Aishnar Intelligence Core -->
+    <section id="sovereignty" class="py-24 bg-white border-y border-slate-100 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-20 items-center">
+                <div class="lg:w-1/2">
+                    <div class="inline-block bg-sky-50 text-sky-600 text-[10px] font-black px-3 py-1 rounded-full mb-6 tracking-widest uppercase">Neural Sovereignty</div>
+                    <h2 class="text-4xl font-black mb-6 leading-tight">Aishnar Intelligence:<br/>The Architecture of Autonomy.</h2>
+                    <p class="text-slate-600 text-lg mb-8">
+                        Most systems in 2026 are centralized—meaning Big Tech owns your context. **Aishnar Intelligence** operates on a **Neural Fabric** that resides where you do. It provides the heavy-lifting logic of a supercomputer with the privacy of an offline vault.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-900 mb-2">Kinetic Logic</h4>
+                            <p class="text-xs text-slate-500">Direct integration with physical logistics and real-world constraints.</p>
+                        </div>
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-900 mb-2">Edge-Auth</h4>
+                            <p class="text-xs text-slate-500">Encryption that ensures intelligence is generated locally, never leaked.</p>
+                        </div>
+                    </div>
+                    <button onclick="window.open('https://intelligence.aishnar.com', '_blank')" class="mt-10 group flex items-center text-sky-600 font-black text-sm uppercase tracking-widest">
+                        Explore the Portal <span class="ml-2 group-hover:translate-x-2 transition">→</span>
+                    </button>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <div class="glass-card p-8 rounded-[3rem] shadow-2xl relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 aishnar-gradient opacity-10 rounded-full blur-3xl"></div>
+                        <h3 class="font-bold text-slate-800 mb-6 text-center">Intelligence Reliability Index (2026)</h3>
+                        <div class="chart-container">
+                            <canvas id="reliabilityChart"></canvas>
+                        </div>
+                        <div class="mt-6 flex justify-center space-x-4">
+                            <div class="flex items-center text-[10px] font-bold text-slate-400">
+                                <span class="w-2 h-2 bg-sky-500 rounded-full mr-2"></span> AISHNAR SOVEREIGN
+                            </div>
+                            <div class="flex items-center text-[10px] font-bold text-slate-400">
+                                <span class="w-2 h-2 bg-slate-300 rounded-full mr-2"></span> LEGACY CLOUD AI
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Section 1: AI in Daily Life (Personal Context) -->
-        <section id="daily-life" class="scroll-mt-24">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
+    <!-- Section 2: Daily Utility Hub (Search) -->
+    <section id="utility" class="py-24 px-6 bg-slate-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black mb-4">Daily Impact Navigator</h2>
+                <p class="text-slate-500">AI in 2026 isn't for fun; it's for survival. Click a daily friction point below to see how Aishnar solves it.</p>
+            </div>
+            
+            <div class="bg-white p-3 rounded-3xl shadow-lg border border-slate-200 mb-10 flex items-center group">
+                <div class="pl-4 text-slate-400 group-focus-within:text-sky-500 transition">⌕</div>
+                <input type="text" id="utilSearch" placeholder="Query: 'Health Audit', 'Tax Optimization', 'Work Logic'..." class="w-full p-4 focus:outline-none text-lg font-medium">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="queryGrid">
+                <!-- Injected via JS -->
+            </div>
+
+            <div id="queryDetail" class="mt-8 hidden animate-in slide-in-from-bottom-5 duration-500">
+                <div class="aishnar-gradient p-10 rounded-[2.5rem] text-white shadow-2xl shadow-sky-200">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 id="detailTitle" class="text-2xl font-black"></h3>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold">AISHNAR VERIFIED</span>
+                    </div>
+                    <p id="detailContent" class="text-sky-50 leading-relaxed text-lg mb-8"></p>
+                    <div class="flex justify-between items-center border-t border-white/10 pt-6">
+                        <span class="text-xs font-bold opacity-70">Impact: High Efficiency Reclaim</span>
+                        <button onclick="document.getElementById('queryDetail').classList.add('hidden')" class="text-xs font-black uppercase tracking-widest bg-white text-sky-600 px-4 py-2 rounded-full">Close Briefing</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Labor & Energy Metrics -->
+    <section id="metrics" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20">
+                <!-- Skill Shift -->
+                <div class="glass-card p-10 rounded-[3rem]">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-2xl font-black mb-1 text-slate-900">The Labor Metamorphosis</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Skill Value Comparison (2023 vs 2026)</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="skillRadar"></canvas>
+                    </div>
+                    <p class="mt-8 text-sm text-slate-500 leading-relaxed">
+                        In 2026, **Technical Knowledge** is cheap. **Judgment, Contextual Synthesis, and Ethics** are the new gold. Aishnar automates the skill, but requires your judgment.
+                    </p>
+                </div>
+
+                <!-- Energy Crisis -->
+                <div class="glass-card p-10 rounded-[3rem]">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-2xl font-black mb-1 text-slate-900">The Compute Cost Gap</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Intelligence Output vs Energy Use</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="energyBar"></canvas>
+                    </div>
+                    <p class="mt-8 text-sm text-slate-500 leading-relaxed">
+                        The reality of 2026: Intelligence is power, but it requires *actual* power. Sovereign models like Aishnar are winning because they optimize energy at the edge.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Trending Feed -->
+    <section id="trending" class="py-24 px-6 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Your Day, Reclaimed</h2>
-                    <p class="text-slate-600 mb-6 text-lg">
-                        In 2026, the average individual saves <strong>2.5 hours daily</strong> thanks to autonomous agents handling mundane tasks. It's not about replacing humans; it's about removing friction.
+                    <h2 class="text-4xl font-black text-slate-900 mb-2">Trending in 2026</h2>
+                    <p class="text-slate-500 italic">Recently updated from the Aishnar global node network.</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-4">
+                    <span class="text-[10px] font-bold px-3 py-1 bg-sky-100 text-sky-600 rounded-full">REAL-TIME</span>
+                    <span class="text-[10px] font-bold px-3 py-1 bg-amber-100 text-amber-600 rounded-full">CRITICAL</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="articleGrid">
+                <!-- Articles injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                <div class="max-w-xs">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-8 h-8 aishnar-gradient rounded-lg flex items-center justify-center text-white font-black">A</div>
+                        <span class="font-black text-xl tracking-tighter">AISHNAR</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        The sovereign standard for intelligence impact in 2026. Designed for architects, not just users.
                     </p>
-                    <p class="text-slate-600 mb-6">
-                        Interact with the chart to see where AI assistants are taking the load off in a typical day. The focus has shifted from "productivity at work" to "quality of life at home."
-                    </p>
-                    
-                    <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-                        <h3 class="font-semibold text-slate-800 mb-3">Key Daily Benefits:</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
-                                <span class="text-slate-600 text-sm"><strong>Proactive Health:</strong> Wearables now predict illness 48h in advance.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
-                                <span class="text-slate-600 text-sm"><strong>Admin Zero:</strong> Taxes, bills, and scheduling are 95% automated.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
-                                <span class="text-slate-600 text-sm"><strong>Creative Flow:</strong> AI drafts, ideates, and edits, letting you finalize.</span>
-                            </li>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+                    <div>
+                        <h5 class="text-[10px] font-black tracking-widest text-sky-400 uppercase mb-6">Intelligence</h5>
+                        <ul class="space-y-4 text-sm font-medium text-slate-300">
+                            <li><a href="https://intelligence.aishnar.com" class="hover:text-white transition">The Portal</a></li>
+                            <li><a href="#" class="hover:text-white transition">Node Map</a></li>
+                            <li><a href="#" class="hover:text-white transition">API Access</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-[10px] font-black tracking-widest text-sky-400 uppercase mb-6">Sovereignty</h5>
+                        <ul class="space-y-4 text-sm font-medium text-slate-300">
+                            <li><a href="#" class="hover:text-white transition">Privacy Laws</a></li>
+                            <li><a href="#" class="hover:text-white transition">Ethics Audit</a></li>
+                            <li><a href="#" class="hover:text-white transition">Edge Tech</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h5 class="text-[10px] font-black tracking-widest text-sky-400 uppercase mb-6">Resources</h5>
+                        <ul class="space-y-4 text-sm font-medium text-slate-300">
+                            <li><a href="#" class="hover:text-white transition">2026 Labor Report</a></li>
+                            <li><a href="#" class="hover:text-white transition">Case Studies</a></li>
+                            <li><a href="#" class="hover:text-white transition">Support Node</a></li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- Visualization: Personal Time Allocation -->
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
-                    <div class="mb-4 text-center">
-                        <h3 class="text-lg font-bold text-slate-800">Task Delegation: Human vs. AI (2026)</h3>
-                        <p class="text-xs text-slate-500">Tap segments to see hours saved per week</p>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="dailyLifeChart"></canvas>
-                    </div>
-                    <div id="chart-caption" class="text-center mt-4 text-sm font-medium text-emerald-600 h-6">
-                        Hover over the chart to see details.
-                    </div>
-                </div>
             </div>
-        </section>
-
-        <!-- Section 2: Global Impact (Macro Data) -->
-        <section id="global-impact" class="scroll-mt-24 bg-slate-50 rounded-3xl p-8 sm:p-12">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">Global Systems & Efficiency</h2>
-                <p class="text-slate-600">
-                    Beyond personal convenience, AI models have optimized critical infrastructure. From reducing energy grid waste to personalizing education curriculums, the macro impact is measurable.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6 mb-8">
-                <!-- Stat Cards -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-blue-500 text-center">
-                    <div class="text-4xl font-bold text-slate-900 mb-1">14%</div>
-                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">Global Energy Savings</div>
-                    <p class="text-xs text-slate-400 mt-2">Via smart grid optimization</p>
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                <span>© 2026 Neural Impact Collective | Aishnar Intelligence</span>
+                <div class="flex space-x-8 mt-6 md:mt-0">
+                    <a href="#" class="hover:text-white transition">Security Protocol</a>
+                    <a href="#" class="hover:text-white transition">Identity Shield</a>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-purple-500 text-center">
-                    <div class="text-4xl font-bold text-slate-900 mb-1">3.2B</div>
-                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">People Educated</div>
-                    <p class="text-xs text-slate-400 mt-2">Access to AI tutors</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 text-center">
-                    <div class="text-4xl font-bold text-slate-900 mb-1">-22%</div>
-                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">Logistics Waste</div>
-                    <p class="text-xs text-slate-400 mt-2">Supply chain prediction</p>
-                </div>
-            </div>
-
-            <!-- Visualization: Comparison Chart -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-                    <h3 class="text-lg font-bold text-slate-800">Efficiency Gains by Sector (2020 vs 2026)</h3>
-                    <select id="impactFilter" class="bg-slate-100 border-none text-sm rounded-lg px-3 py-2 text-slate-700 font-medium focus:ring-2 focus:ring-emerald-500 cursor-pointer">
-                        <option value="efficiency">Metric: Efficiency Score</option>
-                        <option value="cost">Metric: Cost Reduction (%)</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    <canvas id="globalImpactChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Trending Articles (Dynamic Feed) -->
-        <section id="trending" class="scroll-mt-24">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-stone-200 pb-4">
-                <div class="mb-4 md:mb-0">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Trending in 2026</h2>
-                    <p class="text-slate-600">Curated reads on the technologies shaping your tomorrow.</p>
-                </div>
-                
-                <!-- Filter Buttons -->
-                <div class="flex space-x-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-                    <button class="filter-btn active bg-slate-800 text-white px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="all">All</button>
-                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="lifestyle">Lifestyle</button>
-                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="tech">Tech & Ethics</button>
-                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="work">Future of Work</button>
-                </div>
-            </div>
-
-            <!-- Article Grid -->
-            <div id="article-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Articles injected via JS -->
-            </div>
-        </section>
-
-        <!-- Section 4: Contact / Footer -->
-        <footer class="border-t border-stone-200 pt-12 text-center text-slate-500 text-sm">
-            <div class="mb-8">
-                <p class="mb-2">This interactive report is a projection based on 2026 technological trajectories.</p>
-                <p>Designed for clarity, utility, and human impact.</p>
-            </div>
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="#" class="hover:text-emerald-600">Methodology</a>
-                <a href="#" class="hover:text-emerald-600">Privacy Policy</a>
-                <a href="#" class="hover:text-emerald-600">Download PDF</a>
-            </div>
-            <p>&copy; 2026 AI Impact Institute. All rights reserved.</p>
-        </footer>
-
-    </main>
-
-    <!-- Modal for Article Details (Simple Implementation) -->
-    <div id="article-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 shadow-2xl relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-            <span id="modal-tag" class="text-xs font-bold tracking-wider uppercase text-emerald-600 mb-2 block"></span>
-            <h3 id="modal-title" class="text-2xl font-bold text-slate-900 mb-4"></h3>
-            <div id="modal-content" class="prose prose-slate text-slate-600 leading-relaxed"></div>
-            <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
-                <span class="text-xs text-slate-400">Published: Jan 2, 2026</span>
-                <button onclick="closeModal()" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Close Article</button>
             </div>
         </div>
-    </div>
+    </footer>
 
     <script>
         // --- Data Definitions ---
 
-        // 1. Daily Life Data
-        const dailyLifeData = {
-            labels: ['Health Monitoring', 'Admin & Finance', 'Household Management', 'Creative/Work Assist', 'Learning'],
-            datasets: [{
-                data: [15, 30, 20, 25, 10], // Percentages
-                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'],
-                borderWidth: 0,
-                hoverOffset: 10
-            }],
-            details: [
-                "Continuous tracking prevents 40% of ER visits.",
-                "Automated tax filing and bill negotiation save ~4hrs/week.",
-                "Smart pantries and robot vacs reduce chores by 50%.",
-                "AI drafts emails and reports, you just approve.",
-                "Personalized micro-learning replaces rigid courses."
-            ]
-        };
-
-        // 2. Global Impact Data
-        const impactData = {
-            efficiency: [65, 88], // [2020, 2026]
-            cost: [100, 60]       // [2020, 2026] relative index
-        };
-
-        // 3. Articles Database
-        const articles = [
+        const queryData = [
             {
-                id: 1,
-                title: "The Rise of Sovereign Personal Agents",
-                category: "tech",
-                summary: "Why 2026 is the year we stopped using apps and started trusting agents. Your data stays on your device, but your reach is global.",
-                content: "In 2026, the 'App Store' model is dying. Instead of opening 15 different apps to plan a trip, your Personal Sovereign Agent (PSA) negotiates directly with airline and hotel APIs. This article explores the privacy implications and the massive time savings (avg. 12 hours/month) users are reporting. The key shift? Trust. New 'Proof of Humanity' protocols ensure your agent acts only for you.",
-                readTime: "4 min read",
-                trending: true
+                q: "Automated Health Audit",
+                title: "2026 Wellness Optimization",
+                content: "In 2026, health isn't about reactive medicine; it's proactive. Aishnar integrates with your bio-sensors to predict inflammatory spikes 36 hours before they occur. It suggests nutritional 'Node-Adjustments' based on your specific glucose and cortisol telemetry."
             },
             {
-                id: 2,
-                title: "Green AI: Achieving Net Zero Compute",
-                category: "tech",
-                summary: "New liquid cooling chips and optimized models have finally decoupled AI growth from carbon emissions.",
-                content: "For years, training AI was an energy disaster. In 2026, that flipped. With the adoption of biological computing substrates and solar-integrated data centers in the Sahara, the carbon cost of a query is now lower than a Google search in 2022. We analyze the new 'Green Compute' certification that every major corporation is displaying.",
-                readTime: "6 min read",
-                trending: true
+                q: "Autonomous Tax Strategy",
+                title: "Algorithmic Wealth Preservation",
+                content: "Tax codes have become so complex that only a sovereign intelligence can navigate them in real-time. Aishnar automatically tracks digital assets, carbon credits, and local levies to ensure 100% compliance with 0% overpayment. It's the end of the annual filing nightmare."
             },
             {
-                id: 3,
-                title: "The 4-Day Work Week: Now Standard",
-                category: "work",
-                summary: "How AI productivity gains made the 32-hour work week economically viable for 60% of Fortune 500 companies.",
-                content: "It wasn't legislation that brought the 4-day week; it was pure economics. AI co-pilots reduced coding, writing, and analytical time by 40%. Companies faced a choice: fire half the staff or reduce hours to prevent burnout. Most chose the latter. We interview CEOs who say retention is up 80% since the switch.",
-                readTime: "5 min read",
-                trending: false
+                q: "Work Productivity Audit",
+                title: "Cognitive Offloading Protocol",
+                content: "Stop working for your tools. Aishnar identifies the 70% of your daily workload that is 'Simulated Effort' (scheduling, basic synthesis, email triage) and executes it autonomously. Your only task in 2026 is High-Value Judgment."
             },
             {
-                id: 4,
-                title: "AI in the Classroom: The End of Standardized Testing?",
-                category: "lifestyle",
-                summary: "With real-time competency tracking, the annual exam is obsolete. Education is now continuous and adaptive.",
-                content: "Imagine a school with no 'Exam Week'. In 2026 schools, AI tutors track student comprehension in real-time. If a student struggles with calculus, the curriculum adapts instantly, using metaphors from their favorite video games. This report highlights success stories from pilot programs in Finland and South Korea.",
-                readTime: "7 min read",
-                trending: true
-            },
-            {
-                id: 5,
-                title: "Your Doctor is an Algorithm (and that's good)",
-                category: "lifestyle",
-                summary: "Primary care has shifted to home-based AI triage, reducing hospital wait times by 70%.",
-                content: "The stethoscope of 2026 is a smart patch. It listens to your heart, lungs, and gut 24/7. AI analyzes this data against global baselines. When you visit a human doctor now, they already have a diagnosis and treatment plan ready to verify. The human touch is back in medicine, because the robot did the paperwork.",
-                readTime: "5 min read",
-                trending: false
-            },
-            {
-                id: 6,
-                title: "The Deepfake Defense Shield",
-                category: "tech",
-                summary: "How blockchain watermarking restored trust in digital media after the 'Confusion Crisis' of 2025.",
-                content: "2025 was the year nobody knew what was real. 2026 is the year we fixed it. New browser standards now flag non-watermarked content immediately. We look at the tools you need to install today to ensure the news you read is authenticated by a reputable source.",
-                readTime: "3 min read",
-                trending: true
+                q: "Privacy Leak Detection",
+                title: "Sovereign Shield Audit",
+                content: "In 2026, data is more valuable than currency. Aishnar runs continuous background audits on your digital footprint, identifying 'shadow leaks' from legacy devices and sealing them before they are indexed by public scrapers."
             }
         ];
 
-        // --- Chart Initialization ---
-
-        // Chart 1: Daily Life Doughnut
-        const ctxLife = document.getElementById('dailyLifeChart').getContext('2d');
-        const lifeChart = new Chart(ctxLife, {
-            type: 'doughnut',
-            data: dailyLifeData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20,
-                            font: { family: "'Inter', sans-serif", size: 11 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return ` ${context.label}: ${context.raw}%`;
-                            }
-                        }
-                    }
-                },
-                onClick: (e, elements) => {
-                    if (elements.length > 0) {
-                        const index = elements[0].index;
-                        const caption = document.getElementById('chart-caption');
-                        caption.textContent = dailyLifeData.details[index];
-                        caption.classList.add('animate-pulse');
-                        setTimeout(() => caption.classList.remove('animate-pulse'), 500);
-                    }
-                }
-            }
-        });
-
-        // Chart 2: Global Impact Bar
-        const ctxImpact = document.getElementById('globalImpactChart').getContext('2d');
-        let impactChart = new Chart(ctxImpact, {
-            type: 'bar',
-            data: {
-                labels: ['Healthcare', 'Education', 'Logistics', 'Energy', 'Manufacturing'],
-                datasets: [
-                    {
-                        label: '2020 Efficiency Baseline',
-                        data: [60, 50, 55, 60, 65],
-                        backgroundColor: '#cbd5e1', // Slate 300
-                        borderRadius: 4
-                    },
-                    {
-                        label: '2026 AI-Enhanced',
-                        data: [85, 80, 88, 92, 90],
-                        backgroundColor: '#10b981', // Emerald 500
-                        borderRadius: 4
-                    }
-                ]
+        const articles = [
+            {
+                tag: "LABOR",
+                title: "The Death of the 'Mid-Level' Manager",
+                summary: "AI agents now handle 90% of team coordination. Management in 2026 is either purely strategic or purely empathetic.",
+                date: "Jan 1, 2026"
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        align: 'end',
-                        labels: { boxWidth: 12, usePointStyle: true }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: { borderDash: [5, 5] },
-                        title: { display: true, text: 'Efficiency Index (0-100)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
+            {
+                tag: "ENERGY",
+                title: "The Solar-Compute Decoupling",
+                summary: "New silicon-perovskite chips have allowed Aishnar nodes to run entirely on ambient light, ending the 'Energy War'.",
+                date: "Dec 28, 2025"
+            },
+            {
+                tag: "SOCIETY",
+                title: "The Human-Verified Movement",
+                summary: "Why being 'analog-capable' is the most prestigious trait on 2026 resumes. Can you think without the fabric?",
+                date: "Jan 2, 2026"
             }
-        });
+        ];
 
-        // --- Interaction Logic ---
+        // --- Core Logic ---
 
-        // Filter Logic for Impact Chart
-        document.getElementById('impactFilter').addEventListener('change', function(e) {
-            const val = e.target.value;
-            if (val === 'cost') {
-                impactChart.data.datasets[0].label = '2020 Cost Baseline';
-                impactChart.data.datasets[0].data = [100, 100, 100, 100, 100];
-                impactChart.data.datasets[1].label = '2026 Cost (Reduced)';
-                impactChart.data.datasets[1].data = [70, 85, 60, 65, 55]; // Lower is better
-                impactChart.data.datasets[1].backgroundColor = '#3b82f6'; // Blue for cost
-                impactChart.options.scales.y.title.text = 'Relative Cost (%)';
-            } else {
-                impactChart.data.datasets[0].label = '2020 Efficiency Baseline';
-                impactChart.data.datasets[0].data = [60, 50, 55, 60, 65];
-                impactChart.data.datasets[1].label = '2026 AI-Enhanced';
-                impactChart.data.datasets[1].data = [85, 80, 88, 92, 90];
-                impactChart.data.datasets[1].backgroundColor = '#10b981';
-                impactChart.options.scales.y.title.text = 'Efficiency Index (0-100)';
-            }
-            impactChart.update();
-        });
+        window.onload = function() {
+            initQueries();
+            initArticles();
+            initCharts();
+        };
 
-        // Article Generation & Filtering
-        const articleGrid = document.getElementById('article-grid');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        function initQueries() {
+            const grid = document.getElementById('queryGrid');
+            queryData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "glass-card p-6 rounded-2xl cursor-pointer hover:bg-sky-50 transition border border-slate-200";
+                div.innerHTML = `<h4 class="font-bold text-slate-900 mb-1">Q: "${item.q}"</h4><p class="text-xs text-slate-400 font-bold uppercase">Tap for Reality Check</p>`;
+                div.onclick = () => showDetail(index);
+                grid.appendChild(div);
+            });
+        }
 
-        function renderArticles(filter = 'all') {
-            articleGrid.innerHTML = '';
+        function showDetail(index) {
+            const detail = document.getElementById('queryDetail');
+            const title = document.getElementById('detailTitle');
+            const content = document.getElementById('detailContent');
             
-            const filtered = filter === 'all' 
-                ? articles 
-                : articles.filter(a => a.category === filter);
+            const data = queryData[index];
+            title.textContent = data.title;
+            content.textContent = data.content;
+            
+            detail.classList.remove('hidden');
+            detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
-            filtered.forEach(article => {
-                const card = document.createElement('div');
-                card.className = 'article-card bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm flex flex-col h-full cursor-pointer';
-                card.onclick = () => openModal(article);
-                
-                const trendingBadge = article.trending 
-                    ? `<span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Trending</span>` 
-                    : '';
-
-                card.innerHTML = `
-                    <div class="p-6 flex flex-col h-full">
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">${article.category}</span>
-                            ${trendingBadge}
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 leading-tight">${article.title}</h3>
-                        <p class="text-slate-500 text-sm mb-4 flex-grow">${article.summary}</p>
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-50 mt-auto">
-                            <span class="text-xs text-slate-400 font-medium">${article.readTime}</span>
-                            <span class="text-emerald-600 text-sm font-semibold hover:underline">Read Now &rarr;</span>
-                        </div>
+        function initArticles() {
+            const grid = document.getElementById('articleGrid');
+            articles.forEach(art => {
+                const div = document.createElement('div');
+                div.className = "group cursor-pointer";
+                div.innerHTML = `
+                    <div class="mb-4 overflow-hidden rounded-2xl bg-slate-100 h-48 flex items-center justify-center relative">
+                        <span class="text-slate-300 font-black text-6xl group-hover:scale-110 transition duration-500">${art.tag[0]}</span>
+                        <div class="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-sky-600 shadow-sm uppercase tracking-widest">${art.tag}</div>
+                    </div>
+                    <h3 class="text-xl font-black mb-3 text-slate-900 group-hover:text-sky-600 transition">${art.title}</h3>
+                    <p class="text-sm text-slate-500 mb-4 leading-relaxed">${art.summary}</p>
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span>${art.date}</span>
+                        <span class="text-sky-500">Read Briefing →</span>
                     </div>
                 `;
-                articleGrid.appendChild(card);
+                grid.appendChild(div);
             });
         }
 
-        // Initialize Articles
-        renderArticles();
-
-        // Filter Click Events
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update UI
-                filterBtns.forEach(b => {
-                    b.classList.remove('bg-slate-800', 'text-white');
-                    b.classList.add('bg-slate-100', 'text-slate-600');
-                });
-                btn.classList.remove('bg-slate-100', 'text-slate-600');
-                btn.classList.add('bg-slate-800', 'text-white');
-                
-                // Render
-                renderArticles(btn.getAttribute('data-filter'));
+        function initCharts() {
+            // Reliability Chart
+            new Chart(document.getElementById('reliabilityChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Aishnar Sovereign',
+                        data: [99.1, 99.4, 99.8, 99.7, 99.9, 99.98],
+                        borderColor: '#0ea5e9',
+                        tension: 0.4,
+                        borderWidth: 4,
+                        pointRadius: 0,
+                        fill: true,
+                        backgroundColor: 'rgba(14, 165, 233, 0.05)'
+                    }, {
+                        label: 'Legacy Cloud',
+                        data: [82.5, 76.1, 84.4, 72.3, 80.1, 78.5],
+                        borderColor: '#cbd5e1',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: false },
+                        x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } }
+                    }
+                }
             });
-        });
 
-        // Modal Logic
-        const modal = document.getElementById('article-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalContent = document.getElementById('modal-content');
-        const modalTag = document.getElementById('modal-tag');
+            // Skill Radar Chart
+            new Chart(document.getElementById('skillRadar'), {
+                type: 'radar',
+                data: {
+                    labels: ['Coding', 'Empathy', 'Ethics', 'Judgment', 'Calculation', 'Synthesis'],
+                    datasets: [{
+                        label: '2023 Value',
+                        data: [95, 40, 20, 30, 90, 45],
+                        backgroundColor: 'rgba(203, 213, 225, 0.2)',
+                        borderColor: '#94a3b8',
+                        pointRadius: 0
+                    }, {
+                        label: '2026 Value',
+                        data: [15, 95, 85, 98, 10, 90],
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: '#0ea5e9',
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#f1f5f9' },
+                            grid: { color: '#f1f5f9' },
+                            ticks: { display: false },
+                            pointLabels: { font: { size: 10, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
 
-        function openModal(article) {
-            modalTitle.textContent = article.title;
-            modalContent.innerHTML = `<p>${article.content}</p><p class="mt-4 font-medium">Why this matters for your daily life:</p><p class="italic text-slate-500">This technology is expected to be mainstream by Q3 2026. Early adopters are already seeing 20%+ efficiency gains.</p>`;
-            modalTag.textContent = article.category;
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            // Energy Bar Chart
+            new Chart(document.getElementById('energyBar'), {
+                type: 'bar',
+                data: {
+                    labels: ['2023', '2024', '2025', '2026'],
+                    datasets: [{
+                        label: 'Intelligence Output',
+                        data: [10, 45, 82, 120],
+                        backgroundColor: '#0ea5e9',
+                        borderRadius: 6
+                    }, {
+                        label: 'Energy Waste',
+                        data: [40, 35, 18, 5],
+                        backgroundColor: '#cbd5e1',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { display: false, stacked: true }
+                    }
+                }
+            });
         }
-
-        function closeModal() {
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        // Close modal on outside click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Add ESC key listener for modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-
     </script>
 </body>
 </html>
