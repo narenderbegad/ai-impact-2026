@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Impact 2026 | Interactive Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9f6; /* Off-white/Stone background */
+            color: #1f2937;
+        }
+        
+        /* Smooth scrolling for navigation */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Chart Container Styling - MANDATORY for responsiveness */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Scrollbar for article lists */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Card hover effects */
+        .article-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Interactive Element Highlights */
+        .interactive-highlight {
+            border-bottom: 2px solid #10b981; /* Emerald green underline */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .interactive-highlight:hover {
+            background-color: #d1fae5;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals & Nature Tones (Stone #faf9f6, Slate #1f2937, Sage/Emerald #10b981 for actions, Soft Blue #3b82f6 for data) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the context of 2026.
+         2. Daily Life (User-Centric): Focuses on "What's in it for me?" with a doughnut chart on personal task delegation.
+         3. Global Impact (Data-Centric): Bar/Line charts showing macro changes (Education, Climate) with filtering.
+         4. Trending Articles (Discovery): A filterable feed of "future" news articles relevant to daily life.
+         5. The Ethical Balance: A simple toggle interaction to explore pros/cons.
+         Rationale: Starts personal -> moves global -> provides reading material -> ends with critical thinking.
+    -->
+    <!-- Visualization & Content Choices:
+         - Doughnut Chart: "My Day in 2026" - Shows time saved/task allocation. Goal: Personal relevance.
+         - Bar Chart: "Sector Efficiency" - Compares 2023 vs 2026. Goal: Show progress.
+         - Cards: Trending Articles. Goal: Easy consumption of text heavy content.
+         - NO SVG/Mermaid used. All visuals via Chart.js or Tailwind HTML.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-emerald-600 rounded-lg mr-2 flex items-center justify-center text-white font-bold">AI</div>
+                    <span class="font-bold text-xl tracking-tight text-slate-800">Impact<span class="text-emerald-600">2026</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#daily-life" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Daily Life</a>
+                    <a href="#global-impact" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Global Shifts</a>
+                    <a href="#trending" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Trending Now</a>
+                </div>
+                <button onclick="document.getElementById('trending').scrollIntoView()" class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-700 transition-colors">
+                    Read Updates
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-[#faf9f6] pt-16 pb-12 sm:pt-24 sm:pb-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">State of AI Report 2026</div>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                Humanizing the Machine: <br/> <span class="text-emerald-600">AI for Daily Life & Global Good</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Welcome to 2026. AI is no longer just a buzzword—it's your personalized health coach, your creative partner, and the backbone of global sustainability. Explore how the landscape has shifted from <em>hype</em> to <em>human impact</em>.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="#daily-life" class="bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">Explore My Impact</a>
+                <a href="#trending" class="bg-white text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition">Latest Articles</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+
+        <!-- Section 1: AI in Daily Life (Personal Context) -->
+        <section id="daily-life" class="scroll-mt-24">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Your Day, Reclaimed</h2>
+                    <p class="text-slate-600 mb-6 text-lg">
+                        In 2026, the average individual saves <strong>2.5 hours daily</strong> thanks to autonomous agents handling mundane tasks. It's not about replacing humans; it's about removing friction.
+                    </p>
+                    <p class="text-slate-600 mb-6">
+                        Interact with the chart to see where AI assistants are taking the load off in a typical day. The focus has shifted from "productivity at work" to "quality of life at home."
+                    </p>
+                    
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                        <h3 class="font-semibold text-slate-800 mb-3">Key Daily Benefits:</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
+                                <span class="text-slate-600 text-sm"><strong>Proactive Health:</strong> Wearables now predict illness 48h in advance.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
+                                <span class="text-slate-600 text-sm"><strong>Admin Zero:</strong> Taxes, bills, and scheduling are 95% automated.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-1 text-xs">✓</span>
+                                <span class="text-slate-600 text-sm"><strong>Creative Flow:</strong> AI drafts, ideates, and edits, letting you finalize.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visualization: Personal Time Allocation -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+                    <div class="mb-4 text-center">
+                        <h3 class="text-lg font-bold text-slate-800">Task Delegation: Human vs. AI (2026)</h3>
+                        <p class="text-xs text-slate-500">Tap segments to see hours saved per week</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="dailyLifeChart"></canvas>
+                    </div>
+                    <div id="chart-caption" class="text-center mt-4 text-sm font-medium text-emerald-600 h-6">
+                        Hover over the chart to see details.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Global Impact (Macro Data) -->
+        <section id="global-impact" class="scroll-mt-24 bg-slate-50 rounded-3xl p-8 sm:p-12">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Global Systems & Efficiency</h2>
+                <p class="text-slate-600">
+                    Beyond personal convenience, AI models have optimized critical infrastructure. From reducing energy grid waste to personalizing education curriculums, the macro impact is measurable.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Stat Cards -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-blue-500 text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-1">14%</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">Global Energy Savings</div>
+                    <p class="text-xs text-slate-400 mt-2">Via smart grid optimization</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-purple-500 text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-1">3.2B</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">People Educated</div>
+                    <p class="text-xs text-slate-400 mt-2">Access to AI tutors</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-1">-22%</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">Logistics Waste</div>
+                    <p class="text-xs text-slate-400 mt-2">Supply chain prediction</p>
+                </div>
+            </div>
+
+            <!-- Visualization: Comparison Chart -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                    <h3 class="text-lg font-bold text-slate-800">Efficiency Gains by Sector (2020 vs 2026)</h3>
+                    <select id="impactFilter" class="bg-slate-100 border-none text-sm rounded-lg px-3 py-2 text-slate-700 font-medium focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+                        <option value="efficiency">Metric: Efficiency Score</option>
+                        <option value="cost">Metric: Cost Reduction (%)</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="globalImpactChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Trending Articles (Dynamic Feed) -->
+        <section id="trending" class="scroll-mt-24">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-stone-200 pb-4">
+                <div class="mb-4 md:mb-0">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Trending in 2026</h2>
+                    <p class="text-slate-600">Curated reads on the technologies shaping your tomorrow.</p>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex space-x-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
+                    <button class="filter-btn active bg-slate-800 text-white px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="all">All</button>
+                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="lifestyle">Lifestyle</button>
+                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="tech">Tech & Ethics</button>
+                    <button class="filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap" data-filter="work">Future of Work</button>
+                </div>
+            </div>
+
+            <!-- Article Grid -->
+            <div id="article-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Articles injected via JS -->
+            </div>
+        </section>
+
+        <!-- Section 4: Contact / Footer -->
+        <footer class="border-t border-stone-200 pt-12 text-center text-slate-500 text-sm">
+            <div class="mb-8">
+                <p class="mb-2">This interactive report is a projection based on 2026 technological trajectories.</p>
+                <p>Designed for clarity, utility, and human impact.</p>
+            </div>
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="#" class="hover:text-emerald-600">Methodology</a>
+                <a href="#" class="hover:text-emerald-600">Privacy Policy</a>
+                <a href="#" class="hover:text-emerald-600">Download PDF</a>
+            </div>
+            <p>&copy; 2026 AI Impact Institute. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <!-- Modal for Article Details (Simple Implementation) -->
+    <div id="article-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+            <span id="modal-tag" class="text-xs font-bold tracking-wider uppercase text-emerald-600 mb-2 block"></span>
+            <h3 id="modal-title" class="text-2xl font-bold text-slate-900 mb-4"></h3>
+            <div id="modal-content" class="prose prose-slate text-slate-600 leading-relaxed"></div>
+            <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
+                <span class="text-xs text-slate-400">Published: Jan 2, 2026</span>
+                <button onclick="closeModal()" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Close Article</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Definitions ---
+
+        // 1. Daily Life Data
+        const dailyLifeData = {
+            labels: ['Health Monitoring', 'Admin & Finance', 'Household Management', 'Creative/Work Assist', 'Learning'],
+            datasets: [{
+                data: [15, 30, 20, 25, 10], // Percentages
+                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'],
+                borderWidth: 0,
+                hoverOffset: 10
+            }],
+            details: [
+                "Continuous tracking prevents 40% of ER visits.",
+                "Automated tax filing and bill negotiation save ~4hrs/week.",
+                "Smart pantries and robot vacs reduce chores by 50%.",
+                "AI drafts emails and reports, you just approve.",
+                "Personalized micro-learning replaces rigid courses."
+            ]
+        };
+
+        // 2. Global Impact Data
+        const impactData = {
+            efficiency: [65, 88], // [2020, 2026]
+            cost: [100, 60]       // [2020, 2026] relative index
+        };
+
+        // 3. Articles Database
+        const articles = [
+            {
+                id: 1,
+                title: "The Rise of Sovereign Personal Agents",
+                category: "tech",
+                summary: "Why 2026 is the year we stopped using apps and started trusting agents. Your data stays on your device, but your reach is global.",
+                content: "In 2026, the 'App Store' model is dying. Instead of opening 15 different apps to plan a trip, your Personal Sovereign Agent (PSA) negotiates directly with airline and hotel APIs. This article explores the privacy implications and the massive time savings (avg. 12 hours/month) users are reporting. The key shift? Trust. New 'Proof of Humanity' protocols ensure your agent acts only for you.",
+                readTime: "4 min read",
+                trending: true
+            },
+            {
+                id: 2,
+                title: "Green AI: Achieving Net Zero Compute",
+                category: "tech",
+                summary: "New liquid cooling chips and optimized models have finally decoupled AI growth from carbon emissions.",
+                content: "For years, training AI was an energy disaster. In 2026, that flipped. With the adoption of biological computing substrates and solar-integrated data centers in the Sahara, the carbon cost of a query is now lower than a Google search in 2022. We analyze the new 'Green Compute' certification that every major corporation is displaying.",
+                readTime: "6 min read",
+                trending: true
+            },
+            {
+                id: 3,
+                title: "The 4-Day Work Week: Now Standard",
+                category: "work",
+                summary: "How AI productivity gains made the 32-hour work week economically viable for 60% of Fortune 500 companies.",
+                content: "It wasn't legislation that brought the 4-day week; it was pure economics. AI co-pilots reduced coding, writing, and analytical time by 40%. Companies faced a choice: fire half the staff or reduce hours to prevent burnout. Most chose the latter. We interview CEOs who say retention is up 80% since the switch.",
+                readTime: "5 min read",
+                trending: false
+            },
+            {
+                id: 4,
+                title: "AI in the Classroom: The End of Standardized Testing?",
+                category: "lifestyle",
+                summary: "With real-time competency tracking, the annual exam is obsolete. Education is now continuous and adaptive.",
+                content: "Imagine a school with no 'Exam Week'. In 2026 schools, AI tutors track student comprehension in real-time. If a student struggles with calculus, the curriculum adapts instantly, using metaphors from their favorite video games. This report highlights success stories from pilot programs in Finland and South Korea.",
+                readTime: "7 min read",
+                trending: true
+            },
+            {
+                id: 5,
+                title: "Your Doctor is an Algorithm (and that's good)",
+                category: "lifestyle",
+                summary: "Primary care has shifted to home-based AI triage, reducing hospital wait times by 70%.",
+                content: "The stethoscope of 2026 is a smart patch. It listens to your heart, lungs, and gut 24/7. AI analyzes this data against global baselines. When you visit a human doctor now, they already have a diagnosis and treatment plan ready to verify. The human touch is back in medicine, because the robot did the paperwork.",
+                readTime: "5 min read",
+                trending: false
+            },
+            {
+                id: 6,
+                title: "The Deepfake Defense Shield",
+                category: "tech",
+                summary: "How blockchain watermarking restored trust in digital media after the 'Confusion Crisis' of 2025.",
+                content: "2025 was the year nobody knew what was real. 2026 is the year we fixed it. New browser standards now flag non-watermarked content immediately. We look at the tools you need to install today to ensure the news you read is authenticated by a reputable source.",
+                readTime: "3 min read",
+                trending: true
+            }
+        ];
+
+        // --- Chart Initialization ---
+
+        // Chart 1: Daily Life Doughnut
+        const ctxLife = document.getElementById('dailyLifeChart').getContext('2d');
+        const lifeChart = new Chart(ctxLife, {
+            type: 'doughnut',
+            data: dailyLifeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: { family: "'Inter', sans-serif", size: 11 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                },
+                onClick: (e, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const caption = document.getElementById('chart-caption');
+                        caption.textContent = dailyLifeData.details[index];
+                        caption.classList.add('animate-pulse');
+                        setTimeout(() => caption.classList.remove('animate-pulse'), 500);
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Global Impact Bar
+        const ctxImpact = document.getElementById('globalImpactChart').getContext('2d');
+        let impactChart = new Chart(ctxImpact, {
+            type: 'bar',
+            data: {
+                labels: ['Healthcare', 'Education', 'Logistics', 'Energy', 'Manufacturing'],
+                datasets: [
+                    {
+                        label: '2020 Efficiency Baseline',
+                        data: [60, 50, 55, 60, 65],
+                        backgroundColor: '#cbd5e1', // Slate 300
+                        borderRadius: 4
+                    },
+                    {
+                        label: '2026 AI-Enhanced',
+                        data: [85, 80, 88, 92, 90],
+                        backgroundColor: '#10b981', // Emerald 500
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 12, usePointStyle: true }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { borderDash: [5, 5] },
+                        title: { display: true, text: 'Efficiency Index (0-100)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- Interaction Logic ---
+
+        // Filter Logic for Impact Chart
+        document.getElementById('impactFilter').addEventListener('change', function(e) {
+            const val = e.target.value;
+            if (val === 'cost') {
+                impactChart.data.datasets[0].label = '2020 Cost Baseline';
+                impactChart.data.datasets[0].data = [100, 100, 100, 100, 100];
+                impactChart.data.datasets[1].label = '2026 Cost (Reduced)';
+                impactChart.data.datasets[1].data = [70, 85, 60, 65, 55]; // Lower is better
+                impactChart.data.datasets[1].backgroundColor = '#3b82f6'; // Blue for cost
+                impactChart.options.scales.y.title.text = 'Relative Cost (%)';
+            } else {
+                impactChart.data.datasets[0].label = '2020 Efficiency Baseline';
+                impactChart.data.datasets[0].data = [60, 50, 55, 60, 65];
+                impactChart.data.datasets[1].label = '2026 AI-Enhanced';
+                impactChart.data.datasets[1].data = [85, 80, 88, 92, 90];
+                impactChart.data.datasets[1].backgroundColor = '#10b981';
+                impactChart.options.scales.y.title.text = 'Efficiency Index (0-100)';
+            }
+            impactChart.update();
+        });
+
+        // Article Generation & Filtering
+        const articleGrid = document.getElementById('article-grid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        function renderArticles(filter = 'all') {
+            articleGrid.innerHTML = '';
+            
+            const filtered = filter === 'all' 
+                ? articles 
+                : articles.filter(a => a.category === filter);
+
+            filtered.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'article-card bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm flex flex-col h-full cursor-pointer';
+                card.onclick = () => openModal(article);
+                
+                const trendingBadge = article.trending 
+                    ? `<span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Trending</span>` 
+                    : '';
+
+                card.innerHTML = `
+                    <div class="p-6 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">${article.category}</span>
+                            ${trendingBadge}
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 leading-tight">${article.title}</h3>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">${article.summary}</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-50 mt-auto">
+                            <span class="text-xs text-slate-400 font-medium">${article.readTime}</span>
+                            <span class="text-emerald-600 text-sm font-semibold hover:underline">Read Now &rarr;</span>
+                        </div>
+                    </div>
+                `;
+                articleGrid.appendChild(card);
+            });
+        }
+
+        // Initialize Articles
+        renderArticles();
+
+        // Filter Click Events
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update UI
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-slate-800', 'text-white');
+                    b.classList.add('bg-slate-100', 'text-slate-600');
+                });
+                btn.classList.remove('bg-slate-100', 'text-slate-600');
+                btn.classList.add('bg-slate-800', 'text-white');
+                
+                // Render
+                renderArticles(btn.getAttribute('data-filter'));
+            });
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('article-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const modalTag = document.getElementById('modal-tag');
+
+        function openModal(article) {
+            modalTitle.textContent = article.title;
+            modalContent.innerHTML = `<p>${article.content}</p><p class="mt-4 font-medium">Why this matters for your daily life:</p><p class="italic text-slate-500">This technology is expected to be mainstream by Q3 2026. Early adopters are already seeing 20%+ efficiency gains.</p>`;
+            modalTag.textContent = article.category;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Add ESC key listener for modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
